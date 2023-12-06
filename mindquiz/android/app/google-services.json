@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488104080173",
+    "project_id": "mindquiz-f9186",
+    "storage_bucket": "mindquiz-f9186.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488104080173:android:853d4a82aac969f77e19a4",
+        "android_client_info": {
+          "package_name": "com.example.mindquiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxE3OCn7289b4QCU09snSeXiaOZ9mCmGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
