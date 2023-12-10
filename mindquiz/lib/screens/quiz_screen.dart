@@ -100,6 +100,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     Expanded(
                       child: BlocBuilder<QuestionsCubit, QuestionsState>(
                         builder: (context, state) {
+                          
                           return ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               elevation: 0.0,
@@ -177,6 +178,10 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   BlocBuilder<QuestionsCubit, QuestionsState>(
                     builder: (context, state) {
+                      Map qMap = widget.questionsList[context
+                                    .read<QuestionsCubit>()
+                                    .index];
+                      String qName = qMap.keys.toList().first;
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -196,10 +201,9 @@ class _QuizScreenState extends State<QuizScreen> {
                               SizedBox(
                                 height: 20.h,
                               ),
+                              //Text(qMap[qName].toString()),
                               Text(
-                                widget.questionsList[context
-                                    .read<QuestionsCubit>()
-                                    .index]["question"],
+                                qMap[qName]["title"],
                                 style: GoogleFonts.quicksand(
                                   textStyle: TextStyle(
                                     fontSize: 14.sp,
@@ -212,9 +216,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               ),
                               for (int i = 0;
                                   i <
-                                      (widget.questionsList[context
-                                              .read<QuestionsCubit>()
-                                              .index]["answers"] as List)
+                                      (qMap[qName]["answers"] as List)
                                           .length;
                                   i++)
                                 Container(
@@ -226,9 +228,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                               .read<QuestionsCubit>()
                                               .index ==
                                           0) numbers.clear();
-                                      int x = widget.questionsList[context
-                                          .read<QuestionsCubit>()
-                                          .index]["answers"][i]["score"] as int;
+                                      int x = (Map<String, int>.from(qMap[qName]["answers"][i])).values.toList().first;
                                       score = score + x;
                                       numbers.add(x);
 
@@ -278,9 +278,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          widget.questionsList[context
-                                              .read<QuestionsCubit>()
-                                              .index]["answers"][i]["ans"],
+                                          (Map<String, int>.from(qMap[qName]["answers"][i])).keys.toList().first,
                                           style: GoogleFonts.quicksand(
                                             fontSize: 12.sp,
                                           ),

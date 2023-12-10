@@ -58,7 +58,7 @@ class ReviewScreen extends StatelessWidget {
                             );
                           },
                           child: Text(
-                            'Вернуться',
+                            'Закончить',
                             style: GoogleFonts.quicksand(
                               textStyle: TextStyle(
                                   fontSize: 13.sp,
@@ -82,16 +82,9 @@ class ReviewScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
-                          },
+                          onPressed: () => Navigator.of(context).pop(false),
                           child: Text(
-                            'Назад',
+                            'Пройти заново',
                             style: GoogleFonts.quicksand(
                               textStyle: TextStyle(
                                   fontSize: 13.sp,

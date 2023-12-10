@@ -97,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20.h),
                         TextFormField(
                           controller: passwordController,
+                          obscureText: true,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Пароль не может быть пустым';

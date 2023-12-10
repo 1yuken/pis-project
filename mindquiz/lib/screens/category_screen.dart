@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mindquiz/global/global_data.dart';
 import 'package:mindquiz/global/gradient_decoration.dart';
 import 'package:mindquiz/screens/login_screen.dart';
+import 'package:mindquiz/screens/profile_screen.dart';
 import 'package:mindquiz/shared/card_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,13 +38,48 @@ class CategoryScreen extends StatelessWidget {
                     SizedBox(
                       width: 10.w,
                     ),
-                    Text(
-                      'Привет, ${FirebaseAuth.instance.currentUser!.email.toString()}',
-                      style: GoogleFonts.quicksand(
-                        fontSize: 17.0.sp,
-                        color: Colors.white,
-                      ),
+                    FutureBuilder<String?>(
+                      future: getLogin(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text(
+                            'Привет, Гость',
+                            style: GoogleFonts.quicksand(
+                              fontSize: 17.0.sp,
+                              color: Colors.white,
+                            ),
+                          );
+                        } else {
+                          String? login = snapshot.data;
+                          return Text(
+                            'Привет, ${login ?? 'Гость'}',
+                            style: GoogleFonts.quicksand(
+                              fontSize: 17.0.sp,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                      },
                     ),
+                    SizedBox(
+                      width: 155.w, // Здесь установите нужное вам расстояние
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePage(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(
@@ -91,7 +128,7 @@ class CategoryScreen extends StatelessWidget {
                       brief:
                           "Здесь вы найдете захватывающие задачи, способствующие развитию аналитического мышления, улучшению навыков принятия обоснованных решений и глубокому погружению в мир логических головоломок.",
                       numOfQuestions: biologyTest.length,
-                      time: 4,
+                      time: 6,
                     ),
                     CardCategory(
                       images: "assets/images/history_badge.png",
@@ -99,7 +136,7 @@ class CategoryScreen extends StatelessWidget {
                       brief:
                           "Пройдите через упражнения, которые стимулируют логическое мышление, помогут развивать новые идеи и улучшат общую гибкость вашего умственного подхода.",
                       numOfQuestions: historyTest.length,
-                      time: 2,
+                      time: 5,
                     ),
                     CardCategory(
                       images: "assets/images/maths_badge.png",
@@ -107,7 +144,7 @@ class CategoryScreen extends StatelessWidget {
                       brief:
                           "Пройдите через упражнения, спроектированные для улучшения вашей математической гибкости и эффективности в решении различных задач.",
                       numOfQuestions: mathsTest.length,
-                      time: 1,
+                      time: 5,
                     ),
                   ],
                 ),
@@ -118,4 +155,24 @@ class CategoryScreen extends StatelessWidget {
       ),
     ));
   }
+}
+
+Future<String?> getLogin() async {
+  String? email = FirebaseAuth.instance.currentUser?.email;
+
+  if (email != null) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection(
+            'users') // Замените 'users' на ваш путь к коллекции пользователей
+        .doc(email)
+        .get();
+
+    // Проверяем, есть ли такой документ в базе данных
+    if (snapshot.exists) {
+      return snapshot.get('login');
+    }
+  }
+
+  return null; // Если что-то пошло не так или логин не найден
 }
